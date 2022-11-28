@@ -1,0 +1,8 @@
+.errorAlert {
+  color: tomato;
+  background-color: rgb(252, 208, 200);
+  border: 1px solid tomato;
+  text-align: center;
+  border-radius: 4px;
+  padding: 0.6em 1em;
+}
