@@ -2,6 +2,7 @@ import './App.css';
 import './reset.css';
 import Search from './components/Search';
 import Login from './components/Login';
+import Todos from './components/Todos';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <h1>React</h1>
       <Search />
       <Login />
+      <Todos />
     </div>
   );
 }
