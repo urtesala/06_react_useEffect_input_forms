@@ -7,6 +7,9 @@ function Login(props) {
   // state for errors
   const [errorValue, setErrorValue] = useState('');
 
+  // if set true, hide form, show success
+  const [formSuccess, setFormSuccess] = useState(false);
+
   function emailInputHandler(e) {
     setEmailValue(e.target.value);
   }
@@ -30,13 +33,15 @@ function Login(props) {
     // mini validation: jei neivesta kazkuri reikme tai klaida
 
     if (emailValue === '' || passwordValue === '') {
-      console.warn('big big problem');
+      console.warn('labai blogai nes kazkas neivesta !!!!!!!!!!');
       // setError
       setErrorValue('Prasome uzpildyti visus laukus');
       return;
     }
 
-    console.log('viskas ciki siunciam forma >>>>>> ');
+    console.log('viskas gerai siunciam forma >>>>>> ');
+
+    sendLoginReq({ email: emailValue, password: passwordValue });
   }
 
   const showError = errorValue !== '';
@@ -51,29 +56,44 @@ function Login(props) {
       .then((resp) => resp.json())
       .then((dataInJs) => {
         console.log('dataInJs ===', dataInJs);
+        if (dataInJs.error) {
+          console.log('klaida');
+          // jei klaida tai setinam klaida
+          setErrorValue(dataInJs.error);
+        }
+        if (dataInJs.token) {
+          // jei sekme ta consolinam sekme ,
+          console.log('sekme');
+          // jei sekme paslepti forma ir parodyti Sveikinimo kortele.
+          setFormSuccess(true);
+        }
       })
       .catch((err) => console.warn('login error', err));
   }
 
   return (
     <div>
-      <form onSubmit={loginHandler} className='card'>
-        {showError && <h3 className='errorAlert'>{errorValue}</h3>}
+      {formSuccess ? (
+        <h3>Your form was sent successfuly {emailValue}</h3>
+      ) : (
+        <form onSubmit={loginHandler} className='card'>
+          {showError && <h3 className='errorAlert'>{errorValue}</h3>}
 
-        <input
-          onChange={emailInputHandler}
-          value={emailValue}
-          type='text'
-          placeholder='Email'
-        />
-        <input
-          onChange={passwordInputHandler}
-          value={passwordValue}
-          type='password'
-          placeholder='Password '
-        />
-        <button type='submit'>Login</button>
-      </form>
+          <input
+            onChange={emailInputHandler}
+            value={emailValue}
+            type='text'
+            placeholder='Email'
+          />
+          <input
+            onChange={passwordInputHandler}
+            value={passwordValue}
+            type='password'
+            placeholder='Password '
+          />
+          <button type='submit'>Login</button>
+        </form>
+      )}
 
       <div className='card'>
         <h3>Email: {emailValue}</h3>
